@@ -22,10 +22,12 @@ public class PunchCard extends JavaPlugin implements Listener {
     public static Permission perms;
     public Configuration config;
     public PunchManager PM;
-    //private Random randomGenerator = new Random();
+    public String msgPrefix;
 
     public void onEnable() {
         this.log = getLogger();
+        
+        msgPrefix = ChatColor.BLACK + "[" + ChatColor.GRAY + "PunchCard" + ChatColor.BLACK + "] " + ChatColor.RESET;
 
         PluginDescriptionFile pdffile = this.getDescription();
         PluginManager pm = this.getServer().getPluginManager(); //the plugin object which allows us to add listeners later on
@@ -37,9 +39,10 @@ public class PunchCard extends JavaPlugin implements Listener {
         this.PM = new PunchManager(this);
 
         this.config = new Configuration(this);
+        this.config.loadConfiguration();
 
         for (String group : this.config.validGroups) {
-            org.bukkit.permissions.Permission perm = new org.bukkit.permissions.Permission(group);
+            org.bukkit.permissions.Permission perm = new org.bukkit.permissions.Permission("punchcard." + group);
             perm.setDefault(PermissionDefault.FALSE);
             this.getServer().getPluginManager().addPermission(perm);
         }
@@ -58,7 +61,7 @@ public class PunchCard extends JavaPlugin implements Listener {
             if (args.length >= 1) {
                 if (args[0].equalsIgnoreCase("version")) {
                     PluginDescriptionFile pdf = this.getDescription();
-                    cs.sendMessage(pdf.getName() + " " + pdf.getVersion() + " by MDCollins05");
+                    cs.sendMessage(msgPrefix + pdf.getName() + " " + pdf.getVersion() + " by MDCollins05");
                     return true;
                 } else if (args[0].equalsIgnoreCase("in")) {
                     if (cs instanceof Player) {
@@ -70,19 +73,19 @@ public class PunchCard extends JavaPlugin implements Listener {
                                     this.PM.addPunchedinPlayer(player.getName(), player.getLocation(), originalGroup);
                                     perms.playerRemoveGroup(player, originalGroup);
                                     perms.playerAddGroup(player, group);
-                                    player.sendMessage(ChatColor.GREEN + "Time to do work! (Your location has been saved)");
-                                    return false;
+                                    player.sendMessage(msgPrefix + ChatColor.GREEN + "Time to do work! (Your location has been saved)");
+                                    return true;
                                 }
                             }
-                            player.sendMessage(ChatColor.RED + "You don't have permission to run this command!");
-                            return false;
+                            player.sendMessage(msgPrefix + ChatColor.RED + "You don't have permission to run this command!");
+                            return true;
                         } else {
-                            player.sendMessage(ChatColor.RED + "You are already punched in!");
-                            return false;
+                            player.sendMessage(msgPrefix + ChatColor.RED + "You are already punched in!");
+                            return true;
                         }
                     } else {
-                        cs.sendMessage(ChatColor.RED + "You must be a player!");
-                        return false;
+                        cs.sendMessage(msgPrefix + ChatColor.RED + "You must be a player!");
+                        return true;
                     }
                 } else if (args[0].equalsIgnoreCase("out")) {
                     if (cs instanceof Player) {
@@ -93,26 +96,26 @@ public class PunchCard extends JavaPlugin implements Listener {
                             perms.playerAddGroup(player, pp.getOriginalGroup());
                             player.teleport(pp.getOriginalLocation());
                             this.PM.removePunchedinPlayer(player.getName());
-                            player.sendMessage(ChatColor.RED + "You are already no longer punched in and have been returned to your original location!");
-                            return false;
+                            player.sendMessage(msgPrefix + ChatColor.RED + "You are already no longer punched in and have been returned to your original location!");
+                            return true;
                         } else {
-                            player.sendMessage(ChatColor.RED + "You are already punched in!");
-                            return false;
+                            player.sendMessage(msgPrefix + ChatColor.RED + "You are already punched out!");
+                            return true;
                         }
                     } else {
-                        cs.sendMessage(ChatColor.RED + "You must be a player!");
-                        return false;
+                        cs.sendMessage(msgPrefix + ChatColor.RED + "You must be a player!");
+                        return true;
                     }
                 } else {
-                    return false;
+                    return true;
                 }
             } else {
                 if (cs instanceof Player) {
                     Player player = (Player) cs;
-                    if (this.PM.isPunchedin(alias)) {
-                        player.sendMessage("You are punched in!");
+                    if (this.PM.isPunchedin(player.getName())) {
+                        player.sendMessage(msgPrefix + "You are punched in!");
                     } else {
-                        player.sendMessage("You are not punched in!");
+                        player.sendMessage(msgPrefix + "You are not punched in!");
                     }
                 }
             }
@@ -125,7 +128,6 @@ public class PunchCard extends JavaPlugin implements Listener {
     private boolean setupPermissions() {
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
         perms = rsp.getProvider();
-        return perms
-                != null;
+        return perms != null;
     }
 }

@@ -25,6 +25,7 @@ public class PunchManager extends ConfigHelper {
         this.setConfigFileName("punchedin.yml");
         this.loadConfig();
         this.plugin = plugin;
+        this.loadPlayers();
     }
 
     public PunchedinPlayer addPunchedinPlayer(String name, Location originalLocation, String originalGroup) {
@@ -35,6 +36,7 @@ public class PunchManager extends ConfigHelper {
         pp.setOriginalLocation(originalLocation);
         pp.setOriginalGroup(originalGroup);
         this.punchedinplayers.put(name, pp);
+        this.savePlayers();
         return pp;
     }
     
@@ -49,6 +51,8 @@ public class PunchManager extends ConfigHelper {
     public Boolean removePunchedinPlayer(String name) {
         if (this.punchedinplayers.containsKey(name)) {
             this.punchedinplayers.remove(name);
+            this.config.set(name, null);
+            this.savePlayers();
             return true;
         }
         return false;
@@ -86,6 +90,7 @@ public class PunchManager extends ConfigHelper {
             this.config.set(pp.getPlayer() + sep + "originalLocation", this.locationToString(pp.getOriginalLocation()));
             this.config.set(pp.getPlayer() + sep + "originalGroup", pp.getOriginalGroup());
         }
+        this.saveConfig();
     }
     
     public void loadPlayers() {
