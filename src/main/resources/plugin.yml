@@ -12,6 +12,4 @@ commands:
   punch:
     usage: /<command> (action)
     aliases: pcd
-permissions:
-  punchcard.admin:
-    default: false
+

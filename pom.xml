@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.blockmovers.plugins.punchcard</groupId>
     <artifactId>PunchCard</artifactId>
-    <version>11</version>
+    <version>13</version>
     <name>PunchCard</name>
     <url>http://blockmovers.com/</url>
     <repositories>
