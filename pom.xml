@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.blockmovers.plugins.punchcard</groupId>
     <artifactId>PunchCard</artifactId>
-    <version>13</version>
+    <version>14</version>
     <name>PunchCard</name>
     <url>http://blockmovers.com/</url>
     <repositories>
@@ -67,7 +67,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.5.2-R0.1</version>
+            <version>1.7.2-R0.2</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
