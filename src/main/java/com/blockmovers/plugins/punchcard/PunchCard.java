@@ -4,17 +4,17 @@ import java.util.logging.Logger;
 
 import com.blockmovers.plugins.punchcard.api.PunchManager;
 import com.blockmovers.plugins.punchcard.api.PunchedinPlayer;
+import net.milkbowl.vault.permission.Permission;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-import net.milkbowl.vault.permission.Permission;
-import org.bukkit.ChatColor;
-import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class PunchCard extends JavaPlugin implements Listener {
 
@@ -26,7 +26,7 @@ public class PunchCard extends JavaPlugin implements Listener {
 
     public void onEnable() {
         this.log = getLogger();
-        
+
         msgPrefix = ChatColor.BLACK + "[" + ChatColor.GRAY + "PunchCard" + ChatColor.BLACK + "] " + ChatColor.RESET;
 
         PluginDescriptionFile pdffile = this.getDescription();
@@ -66,11 +66,11 @@ public class PunchCard extends JavaPlugin implements Listener {
                 } else if (args[0].equalsIgnoreCase("in")) {
                     if (cs instanceof Player) {
                         Player player = (Player) cs;
-                        if (!this.PM.isPunchedin(player.getName())) {
+                        if (!this.PM.isPunchedin(player.getUniqueId())) {
                             for (String group : this.config.validGroups) {
                                 if (cs.hasPermission("punchcard." + group)) {
                                     String originalGroup = perms.getPrimaryGroup(player);
-                                    this.PM.addPunchedinPlayer(player.getName(), player.getLocation(), originalGroup);
+                                    this.PM.addPunchedinPlayer(player.getUniqueId(), player.getLocation(), originalGroup);
                                     perms.playerRemoveGroup(player, originalGroup);
                                     perms.playerAddGroup(player, group);
                                     player.sendMessage(msgPrefix + ChatColor.GREEN + "Time to do work! (Your location has been saved)");
@@ -90,7 +90,7 @@ public class PunchCard extends JavaPlugin implements Listener {
                 } else if (args[0].equalsIgnoreCase("out")) {
                     if (cs instanceof Player) {
                         Player player = (Player) cs;
-                        if (this.PM.isPunchedin(cs.getName())) {
+                        if (this.PM.isPunchedin(player.getUniqueId())) {
                             PunchedinPlayer pp = this.PM.getPunchedinPlayer(player.getName());
                             perms.playerRemoveGroup(player, perms.getPrimaryGroup(player));
                             perms.playerAddGroup(player, pp.getOriginalGroup());
@@ -112,7 +112,7 @@ public class PunchCard extends JavaPlugin implements Listener {
             } else {
                 if (cs instanceof Player) {
                     Player player = (Player) cs;
-                    if (this.PM.isPunchedin(player.getName())) {
+                    if (this.PM.isPunchedin(player.getUniqueId())) {
                         player.sendMessage(msgPrefix + "You are punched in!");
                     } else {
                         player.sendMessage(msgPrefix + "You are not punched in!");

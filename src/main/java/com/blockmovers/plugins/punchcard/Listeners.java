@@ -25,7 +25,7 @@ public class Listeners implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (this.plugin.PM.isPunchedin(player.getName())) {
+        if (this.plugin.PM.isPunchedin(player.getUniqueId())) {
             player.sendMessage(this.plugin.msgPrefix + ChatColor.GREEN + "You are still punched in!");
         }
     }

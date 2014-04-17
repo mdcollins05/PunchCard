@@ -4,6 +4,8 @@
  */
 package com.blockmovers.plugins.punchcard.api;
 
+import java.util.UUID;
+
 import org.bukkit.Location;
 
 /**
@@ -11,16 +13,16 @@ import org.bukkit.Location;
  * @author MattC
  */
 public class PunchedinPlayer {
-    
-    private String player;
+
+    private UUID player;
     private Location originalLocation;
     private String originalGroup;
-    
-    public PunchedinPlayer(String player) {
+
+    public PunchedinPlayer(UUID player) {
         this.player = player;
     }
 
-    public String getPlayer() {
+    public UUID getPlayerUUID() {
         return player;
     }
 
