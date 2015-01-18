@@ -113,7 +113,7 @@ public class PunchCard extends JavaPlugin implements Listener
                             perms.playerRemoveGroup(player, perms.getPrimaryGroup(player));
                             perms.playerAddGroup(player, pp.getOriginalGroup());
                             player.teleport(pp.getOriginalLocation());
-                            this.PM.removePunchedinPlayer(player.getName());
+                            this.PM.removePunchedinPlayer(player.getUniqueId());
                             player.sendMessage(msgPrefix + ChatColor.RED + "You are now punched out and have been returned to your original location!");
                             return true;
                         } else

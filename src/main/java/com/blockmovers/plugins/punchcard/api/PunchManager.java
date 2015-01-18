@@ -21,7 +21,7 @@ public class PunchManager extends ConfigHelper
 {
 
     private PunchCard plugin;
-    private Map<String, PunchedinPlayer> punchedinplayers = new HashMap();
+    private Map<UUID, PunchedinPlayer> punchedinplayers = new HashMap();
 
     public PunchManager(PunchCard plugin)
     {
@@ -34,14 +34,14 @@ public class PunchManager extends ConfigHelper
 
     public PunchedinPlayer addPunchedinPlayer(UUID uuid, Location originalLocation, String originalGroup)
     {
-        if (this.punchedinplayers.containsKey(uuid.toString()))
+        if (this.punchedinplayers.containsKey(uuid))
         {
             return null;
         }
         PunchedinPlayer pp = new PunchedinPlayer(uuid);
         pp.setOriginalLocation(originalLocation);
         pp.setOriginalGroup(originalGroup);
-        this.punchedinplayers.put(uuid.toString(), pp);
+        this.punchedinplayers.put(uuid, pp);
         this.savePlayers();
         return pp;
     }
@@ -55,12 +55,12 @@ public class PunchManager extends ConfigHelper
         return null;
     }
 
-    public Boolean removePunchedinPlayer(String name)
+    public Boolean removePunchedinPlayer(UUID uuid)
     {
-        if (this.punchedinplayers.containsKey(name))
+        if (this.punchedinplayers.containsKey(uuid))
         {
-            this.punchedinplayers.remove(name);
-            this.config.set(name, null);
+            this.punchedinplayers.remove(uuid);
+            this.config.set(uuid.toString(), null);
             this.savePlayers();
             return true;
         }
@@ -69,7 +69,7 @@ public class PunchManager extends ConfigHelper
 
     public Boolean isPunchedin(UUID uuid)
     {
-        return this.punchedinplayers.containsKey(uuid.toString());
+        return this.punchedinplayers.containsKey(uuid);
     }
 
     public String locationToString(Location l)
@@ -116,7 +116,7 @@ public class PunchManager extends ConfigHelper
                 PunchedinPlayer pp = new PunchedinPlayer(UUID.fromString(uuid));
                 pp.setOriginalLocation(this.stringToLocation(config.getString(uuid + sep + "originalLocation")));
                 pp.setOriginalGroup(config.getString(uuid + sep + "originalGroup"));
-                this.punchedinplayers.put(uuid, pp);
+                this.punchedinplayers.put(UUID.fromString(uuid), pp);
             }
         }
     }
