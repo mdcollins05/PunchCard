@@ -12,33 +12,40 @@ import org.bukkit.Location;
  *
  * @author MattC
  */
-public class PunchedinPlayer {
+public class PunchedinPlayer
+{
 
     private UUID player;
     private Location originalLocation;
     private String originalGroup;
 
-    public PunchedinPlayer(UUID player) {
+    public PunchedinPlayer(UUID player)
+    {
         this.player = player;
     }
 
-    public UUID getPlayerUUID() {
+    public UUID getPlayerUUID()
+    {
         return player;
     }
 
-    public Location getOriginalLocation() {
+    public Location getOriginalLocation()
+    {
         return originalLocation;
     }
 
-    public void setOriginalLocation(Location originalLocation) {
+    public void setOriginalLocation(Location originalLocation)
+    {
         this.originalLocation = originalLocation;
     }
 
-    public String getOriginalGroup() {
+    public String getOriginalGroup()
+    {
         return originalGroup;
     }
 
-    public void setOriginalGroup(String originalGroup) {
+    public void setOriginalGroup(String originalGroup)
+    {
         this.originalGroup = originalGroup;
     }
 }

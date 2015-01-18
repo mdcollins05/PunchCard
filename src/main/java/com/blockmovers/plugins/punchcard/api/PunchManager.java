@@ -17,12 +17,14 @@ import org.bukkit.Location;
  *
  * @author MattC
  */
-public class PunchManager extends ConfigHelper {
+public class PunchManager extends ConfigHelper
+{
 
     private PunchCard plugin;
     private Map<String, PunchedinPlayer> punchedinplayers = new HashMap();
 
-    public PunchManager(PunchCard plugin) {
+    public PunchManager(PunchCard plugin)
+    {
         this.setPlugin(plugin);
         this.setConfigFileName("punchedin.yml");
         this.loadConfig();
@@ -30,8 +32,10 @@ public class PunchManager extends ConfigHelper {
         this.loadPlayers();
     }
 
-    public PunchedinPlayer addPunchedinPlayer(UUID uuid, Location originalLocation, String originalGroup) {
-        if (this.punchedinplayers.containsKey(uuid.toString())) {
+    public PunchedinPlayer addPunchedinPlayer(UUID uuid, Location originalLocation, String originalGroup)
+    {
+        if (this.punchedinplayers.containsKey(uuid.toString()))
+        {
             return null;
         }
         PunchedinPlayer pp = new PunchedinPlayer(uuid);
@@ -42,15 +46,19 @@ public class PunchManager extends ConfigHelper {
         return pp;
     }
 
-    public PunchedinPlayer getPunchedinPlayer(String name) {
-        if (this.punchedinplayers.containsKey(name)) {
-            return this.punchedinplayers.get(name);
+    public PunchedinPlayer getPunchedinPlayer(UUID uuid)
+    {
+        if (this.punchedinplayers.containsKey(uuid))
+        {
+            return this.punchedinplayers.get(uuid);
         }
         return null;
     }
 
-    public Boolean removePunchedinPlayer(String name) {
-        if (this.punchedinplayers.containsKey(name)) {
+    public Boolean removePunchedinPlayer(String name)
+    {
+        if (this.punchedinplayers.containsKey(name))
+        {
             this.punchedinplayers.remove(name);
             this.config.set(name, null);
             this.savePlayers();
@@ -59,11 +67,13 @@ public class PunchManager extends ConfigHelper {
         return false;
     }
 
-    public Boolean isPunchedin(UUID uuid) {
+    public Boolean isPunchedin(UUID uuid)
+    {
         return this.punchedinplayers.containsKey(uuid.toString());
     }
 
-    public String locationToString(Location l) {
+    public String locationToString(Location l)
+    {
         StringBuilder sb = new StringBuilder();
         sb.append(l.getWorld().getName()).append(":")
                 .append(l.getX()).append(":")
@@ -74,27 +84,35 @@ public class PunchManager extends ConfigHelper {
         return sb.toString();
     }
 
-    public Location stringToLocation(String l) {
+    public Location stringToLocation(String l)
+    {
         String[] lSplit = l.split(":");
-        try {
+        try
+        {
             return new Location(Bukkit.getWorld(lSplit[0]), Double.valueOf(lSplit[1]), Double.valueOf(lSplit[2]), Double.valueOf(lSplit[3]), Float.valueOf(lSplit[4]), Float.valueOf(lSplit[5]));
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             return null;
         }
     }
 
-    public void savePlayers() {
-        for (PunchedinPlayer pp : this.punchedinplayers.values()) {
+    public void savePlayers()
+    {
+        for (PunchedinPlayer pp : this.punchedinplayers.values())
+        {
             this.config.set(pp.getPlayerUUID().toString() + sep + "originalLocation", this.locationToString(pp.getOriginalLocation()));
             this.config.set(pp.getPlayerUUID().toString() + sep + "originalGroup", pp.getOriginalGroup());
         }
         this.saveConfig();
     }
 
-    public void loadPlayers() {
+    public void loadPlayers()
+    {
         Set<String> players = config.getConfigurationSection("").getKeys(false);
-        if (!players.isEmpty()) {
-            for (String uuid : players) {
+        if (!players.isEmpty())
+        {
+            for (String uuid : players)
+            {
                 PunchedinPlayer pp = new PunchedinPlayer(UUID.fromString(uuid));
                 pp.setOriginalLocation(this.stringToLocation(config.getString(uuid + sep + "originalLocation")));
                 pp.setOriginalGroup(config.getString(uuid + sep + "originalGroup"));

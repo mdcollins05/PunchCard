@@ -16,7 +16,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class PunchCard extends JavaPlugin implements Listener {
+public class PunchCard extends JavaPlugin implements Listener
+{
 
     Logger log;
     public static Permission perms;
@@ -24,7 +25,8 @@ public class PunchCard extends JavaPlugin implements Listener {
     public PunchManager PM;
     public String msgPrefix;
 
-    public void onEnable() {
+    public void onEnable()
+    {
         this.log = getLogger();
 
         msgPrefix = ChatColor.BLACK + "[" + ChatColor.GRAY + "PunchCard" + ChatColor.BLACK + "] " + ChatColor.RESET;
@@ -41,7 +43,8 @@ public class PunchCard extends JavaPlugin implements Listener {
         this.config = new Configuration(this);
         this.config.loadConfiguration();
 
-        for (String group : this.config.validGroups) {
+        for (String group : this.config.validGroups)
+        {
             org.bukkit.permissions.Permission perm = new org.bukkit.permissions.Permission("punchcard." + group);
             perm.setDefault(PermissionDefault.FALSE);
             this.getServer().getPluginManager().addPermission(perm);
@@ -50,25 +53,35 @@ public class PunchCard extends JavaPlugin implements Listener {
         log.info(pdffile.getName() + " version " + pdffile.getVersion() + " is enabled.");
     }
 
-    public void onDisable() {
+    public void onDisable()
+    {
         PluginDescriptionFile pdffile = this.getDescription();
 
         log.info(pdffile.getName() + " version " + pdffile.getVersion() + " is disabled.");
     }
 
-    public boolean onCommand(CommandSender cs, Command cmd, String alias, String[] args) {
-        if (cmd.getName().equalsIgnoreCase("punch")) {
-            if (args.length >= 1) {
-                if (args[0].equalsIgnoreCase("version")) {
+    public boolean onCommand(CommandSender cs, Command cmd, String alias, String[] args)
+    {
+        if (cmd.getName().equalsIgnoreCase("punch"))
+        {
+            if (args.length >= 1)
+            {
+                if (args[0].equalsIgnoreCase("version"))
+                {
                     PluginDescriptionFile pdf = this.getDescription();
                     cs.sendMessage(msgPrefix + pdf.getName() + " " + pdf.getVersion() + " by MDCollins05");
                     return true;
-                } else if (args[0].equalsIgnoreCase("in")) {
-                    if (cs instanceof Player) {
+                } else if (args[0].equalsIgnoreCase("in"))
+                {
+                    if (cs instanceof Player)
+                    {
                         Player player = (Player) cs;
-                        if (!this.PM.isPunchedin(player.getUniqueId())) {
-                            for (String group : this.config.validGroups) {
-                                if (cs.hasPermission("punchcard." + group)) {
+                        if (!this.PM.isPunchedin(player.getUniqueId()))
+                        {
+                            for (String group : this.config.validGroups)
+                            {
+                                if (cs.hasPermission("punchcard." + group))
+                                {
                                     String originalGroup = perms.getPrimaryGroup(player);
                                     this.PM.addPunchedinPlayer(player.getUniqueId(), player.getLocation(), originalGroup);
                                     perms.playerRemoveGroup(player, originalGroup);
@@ -79,42 +92,54 @@ public class PunchCard extends JavaPlugin implements Listener {
                             }
                             player.sendMessage(msgPrefix + ChatColor.RED + "You don't have permission to run this command!");
                             return true;
-                        } else {
+                        } else
+                        {
                             player.sendMessage(msgPrefix + ChatColor.RED + "You are already punched in!");
                             return true;
                         }
-                    } else {
+                    } else
+                    {
                         cs.sendMessage(msgPrefix + ChatColor.RED + "You must be a player!");
                         return true;
                     }
-                } else if (args[0].equalsIgnoreCase("out")) {
-                    if (cs instanceof Player) {
+                } else if (args[0].equalsIgnoreCase("out"))
+                {
+                    if (cs instanceof Player)
+                    {
                         Player player = (Player) cs;
-                        if (this.PM.isPunchedin(player.getUniqueId())) {
-                            PunchedinPlayer pp = this.PM.getPunchedinPlayer(player.getName());
+                        if (this.PM.isPunchedin(player.getUniqueId()))
+                        {
+                            PunchedinPlayer pp = this.PM.getPunchedinPlayer(player.getUniqueId());
                             perms.playerRemoveGroup(player, perms.getPrimaryGroup(player));
                             perms.playerAddGroup(player, pp.getOriginalGroup());
                             player.teleport(pp.getOriginalLocation());
                             this.PM.removePunchedinPlayer(player.getName());
                             player.sendMessage(msgPrefix + ChatColor.RED + "You are now punched out and have been returned to your original location!");
                             return true;
-                        } else {
+                        } else
+                        {
                             player.sendMessage(msgPrefix + ChatColor.RED + "You are already punched out!");
                             return true;
                         }
-                    } else {
+                    } else
+                    {
                         cs.sendMessage(msgPrefix + ChatColor.RED + "You must be a player!");
                         return true;
                     }
-                } else {
+                } else
+                {
                     return true;
                 }
-            } else {
-                if (cs instanceof Player) {
+            } else
+            {
+                if (cs instanceof Player)
+                {
                     Player player = (Player) cs;
-                    if (this.PM.isPunchedin(player.getUniqueId())) {
+                    if (this.PM.isPunchedin(player.getUniqueId()))
+                    {
                         player.sendMessage(msgPrefix + "You are punched in!");
-                    } else {
+                    } else
+                    {
                         player.sendMessage(msgPrefix + "You are not punched in!");
                     }
                 }
@@ -125,7 +150,8 @@ public class PunchCard extends JavaPlugin implements Listener {
         return false;
     }
 
-    private boolean setupPermissions() {
+    private boolean setupPermissions()
+    {
         RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
         perms = rsp.getProvider();
         return perms != null;
