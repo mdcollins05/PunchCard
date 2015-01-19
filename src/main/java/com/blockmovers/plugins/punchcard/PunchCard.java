@@ -84,8 +84,8 @@ public class PunchCard extends JavaPlugin implements Listener
                                 {
                                     String originalGroup = perms.getPrimaryGroup(player);
                                     this.PM.addPunchedinPlayer(player.getUniqueId(), player.getLocation(), originalGroup);
-                                    perms.playerRemoveGroup(player, originalGroup);
-                                    perms.playerAddGroup(player, group);
+                                    perms.playerRemoveGroup(null, player, originalGroup); //set the world to null because otherwise things break in perms plugins that don't have per-world groups..
+                                    perms.playerAddGroup(null, player, group); //set the world to null because otherwise things break in perms plugins that don't have per-world groups..
                                     player.sendMessage(msgPrefix + ChatColor.GREEN + "Time to do work! (Your location has been saved)");
                                     return true;
                                 }
@@ -110,8 +110,8 @@ public class PunchCard extends JavaPlugin implements Listener
                         if (this.PM.isPunchedin(player.getUniqueId()))
                         {
                             PunchedinPlayer pp = this.PM.getPunchedinPlayer(player.getUniqueId());
-                            perms.playerRemoveGroup(player, perms.getPrimaryGroup(player));
-                            perms.playerAddGroup(player, pp.getOriginalGroup());
+                            perms.playerRemoveGroup(null, player, perms.getPrimaryGroup(player)); //set the world to null because otherwise things break in perms plugins that don't have per-world groups..
+                            perms.playerAddGroup(null, player, pp.getOriginalGroup()); //set the world to null because otherwise things break in perms plugins that don't have per-world groups..
                             player.teleport(pp.getOriginalLocation());
                             this.PM.removePunchedinPlayer(player.getUniqueId());
                             player.sendMessage(msgPrefix + ChatColor.RED + "You are now punched out and have been returned to your original location!");
